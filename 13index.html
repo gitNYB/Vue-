@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <link rel="stylesheet" href="css/demo.css">
+</head>
+<body>
+  <div id="app">
+      <div>
+        Search <input type="text" v-model="searchQuery">
+      </div>
+      <simple-grid :data="gridData" :columns="gridColumns" :filter-key="searchQuery"></simple-grid>
+
+  </div>
+  <template id="grid-template">
+      <table>
+         <thead>
+           <tr>
+             <th v-for="col in columns">
+                {{ col | capitalize}}
+             </th>
+           </tr>
+         </thead>
+         <tbody>
+            <tr v-for="row in filterQuery">
+               <td v-for="col in columns">
+                  {{row[col]}}
+               </td>
+            </tr>
+         </tbody>
+      </table>
+  </template>
+</body>
+<script src="https://unpkg.com/vue@2.1.10/dist/vue.js"></script>
+<script type="text/javascript">
+   Vue.filter('capitalize',function(text){
+     if (!text){return ''}
+     text = text.toString()
+     return text[0].toUpperCase() + text.slice(1)
+   })
+
+   Vue.component('simple-grid',{
+      template:'#grid-template',
+      props:{
+        data:Array,
+        columns:Array,
+        filterKey:String
+      },
+      computed: {
+         filterQuery:function(){
+           let search = this.filterKey
+
+           if(search){
+             return this.data.filter(
+               function(data){
+                 return Object.keys(data).some(
+                   function(key){
+                     return String(data[key]).toLowerCase().indexOf(search) > -1
+                   })
+              })
+            }
+
+           return this.data;
+         }
+      }
+   })
+   new Vue({
+     el:'#app',
+     data:{
+       searchQuery:'',
+       gridColumns:['name','age','sex'],
+       gridData:[{
+         name:'Jack',
+         age:28,
+         sex:'Male'
+       },{
+         name:'Bili',
+         age:30,
+         sex:'Female'
+       },{
+         name:'Tracy',
+         age:27,
+         sex:'Female'
+       },{
+         name:'Ben',
+         age:33,
+         sex:'Male'
+       }]
+     }
+   })
+</script>
+</html>

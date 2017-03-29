@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <style media="screen">
+     template{
+       display: none
+     }
+  </style>
+</head>
+<body>
+   <div id="app">
+     <h1>Hello app</h1>
+     <p>
+       <router-link to="/foo">Go to Foo</router-link>
+       <router-link to="/bar">Go to Bar</router-link>
+       <router-link to="/user/nyb">Go to nyb</router-link>
+     </p>
+     <router-view></router-view>
+   </div>
+</body>
+<script src="https://unpkg.com/vue@2.1.10/dist/vue.js"></script>
+<script src="https://unpkg.com/vue-router/dist/vue-router.js"></script>
+<script type="text/javascript">
+    const Foo = {template:'<div>foo</div>'}
+    const Bar = {template:'<div>bar</div>'}
+    const User = {template:'<div>User:{{$route.params.id}}</div>'}
+
+    const routes = [{path:'/foo',component:Foo},
+           {path:'/bar',component:Bar},
+           {path:'/user/:id',component:User}]
+    const router = new VueRouter({
+       routes:routes
+    })
+
+    const app = new Vue({ router }).$mount('#app')
+</script>
+</html>

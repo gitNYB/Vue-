@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <style media="screen">
+    template{display: none;}
+    router-link{display:none;}
+    router-view{display: none;}
+  </style>
+</head>
+<body>
+  <div id="app">
+     <router-link to="/new?to=foo">new</router-link>
+     <router-view></router-view>
+  </div>
+  <template id="news">
+     <p>This is news</p>
+  </template>
+</body>
+<script src="https://unpkg.com/vue@2.1.10/dist/vue.js"></script>
+<script src="https://unpkg.com/vue-router/dist/vue-router.js"></script>
+<script type="text/javascript">
+   const router = new VueRouter({
+     //mode: 'history',
+     routes:[
+       {
+         path:'/new',
+         redirect: toddd => {
+        const { hash, params, query } = toddd
+        if (toddd.query.to === 'foo') {
+          return { path: '/news', query: null }
+        }
+        if (hash === '#baz') {
+          return { name: 'news', hash: '' }
+        }
+        if (params.id) {
+          return '/news/:id'
+        } else {
+          return '/bar'
+        }
+      }
+       },{
+         path:'/news',
+         name:'news',
+         component:{
+           template:'#news'
+         }
+       }
+     ]
+   })
+   new Vue({router:router}).$mount('#app')
+</script>
+</html>

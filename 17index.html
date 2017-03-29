@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+<body>
+  <div id="app">
+     <my-component></my-component>
+  </div>
+  <template id="myComponent">
+      <div>
+        <children-component1 ref="cc1"></children-component1>
+        <children-component2 ref="cc2"></children-component2>
+        <button @click="showAllMsg">显示所有子组件数据</button>
+      </div>
+  </template>
+  <template id="children-component1">
+     <p>This is children Component 1</p>
+  </template>
+  <template id="children-component2">
+     <p>This is children Component 2</p>
+  </template>
+</body>
+<script src="https://unpkg.com/vue@2.1.10/dist/vue.js"></script>
+<script type="text/javascript">
+  Vue.component('my-component',{
+     template:'#myComponent',
+     components:{
+        'children-component1':{
+          template:'#children-component1',
+          data:function(){
+             return {
+                msg:'children component 111111'
+             }
+          }
+        },
+        'children-component2':{
+           template:'#children-component2',
+           data:function(){
+             return {
+                msg:'children component 2222222'
+             }
+           }
+        }
+     },
+     methods:{
+          showAllMsg:function(){
+            alert(this.$refs.cc1.msg)
+            alert(this.$refs.cc2.msg)
+          }
+     }
+  })
+  new Vue({
+    el:'#app'
+  })
+</script>
+</html>

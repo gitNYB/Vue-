@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <style media="screen">
+    template{display: none}
+    router-view{display:none}
+  </style>
+</head>
+<body>
+  <div id="app">
+    <router-link to="/user/nyb/profile">Profile</router-link>
+    <router-link to="/user/lww/posts">Posts</router-link>
+    <router-view></router-view>
+  </div>
+</body>
+<script src="https://unpkg.com/vue@2.1.10/dist/vue.js"></script>
+<script src="https://unpkg.com/vue-router/dist/vue-router.js"></script>
+<script type="text/javascript">
+  const User = {template:'<div>User:{{$route.params.id}} <router-view></router-view></div>'}
+  const UserProfile = {template:'<div>Profile</div>'}
+  const UserPosts = {template:'<div>Posts</div>'}
+  const routes = [{path:'/user/:id',component:User,
+      children:[{
+        path:'profile',
+        component:UserProfile
+      },{
+        path:'posts',
+        component:UserPosts
+      }]
+}]
+  const router = new VueRouter({
+     routes:routes
+  })
+  const vm = new Vue({
+     router:router
+  }).$mount('#app')
+</script>
+</html>

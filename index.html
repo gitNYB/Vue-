@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+<body>
+  <div id="myapp">
+   <p>{{ msage }}</p>
+   <input type="text" v-model="msage"/>
+   <h1>Hello,vue</h1>
+   <h1 v-if="yes">Yes!</h1>
+   <h1 v-if="no" >NO!</h1>
+   <h1 v-if="age >= 25">Age:{{age}}</h1>
+   <h1 v-if="name.indexOf('jack') >= 0">Name:{{ name }}</h1>
+   <h1 v-show="yes">YES!</h1>
+   <h1 v-show="no">NO!</h1>
+   <h1 v-show="age >= 25">Age2:{{age}}</h1>
+   <h1 v-show="name.indexOf('jack') >= 0">Name:{{ name }}</h1>
+   <h1 v-if="age >= 25">Age3:{{age}}</h1>
+   <h1 v-else>Name:{{name}}</h1>
+   <h1>-------------------------分割线-----------------------</h1>
+   <h1 v-show="name.indexOf('keep') >= 0">Name:{{name}}</h1>
+   <h1 v-else>Sex:{{sex}}</h1>
+  </div>
+</body>
+<script src="https://unpkg.com/vue@2.1.10/dist/vue.js"></script>
+<script type="text/javascript">
+   //建立View与model联系
+   let modelDate = {
+      message:'Hello World!'
+   }
+
+   let newVue = new Vue({
+      el:'#myapp',
+      data:{
+        yes:true,
+        no:false,
+        age:28,
+        name:'keepfool',
+        msage:'Hello World!',
+        sex:'Male'
+      }
+   })
+</script>
+</html>

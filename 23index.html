@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <link rel="stylesheet" href="css/demo.css">
+  <link rel="stylesheet" href="css/15.css">
+  <style media="screen">
+     template{display: none}
+  </style>
+</head>
+<body>
+   <div id="app">
+      <div>
+         <label>Seach:</label>
+         <input type="text" v-model="searchkey">
+      </div>
+      <div>
+         <simple-grid :search-query="searchkey" :data-list="people" :columns="columns"></simple-grid>
+      </div>
+   </div>
+   <template id="gridTemplate">
+     <div>
+      <table>
+         <thead>
+           <tr>
+              <td v-for="col in columns">{{col | capitalize}}</td>
+              <td>Delete</td>
+              <td>Edit</td>
+           </tr>
+         </thead>
+         <tbody>
+            <tr v-for="(row,index)in filterQuery">
+               <td v-for="col in columns">{{row[col]}}</td>
+               <td ><button type="button" @click="deleteRow(index)">Delete</button></td>
+               <td><button type="button" @click="openEdit(index)">Edit</button></td>
+            </tr>
+         </tbody>
+      </table>
+      <button @click="openNew">创建新信息</button>
+      <model-dialog :mode="mode" :title="title" :item="item" :fields="fields"></model-dialog>
+      </div>
+   </template>
+   <template id="dialog-template">
+        <div class="dialogs">
+           <div class="dialog" :class="{'dialog-active':show}">
+              <div class="dialog-content">
+                 <header class="dialog-header">
+                    <h1 class="dialog-title">{{title}}</h1>
+                 </header>
+                 <footer class="dialog-footer">
+                    <div class="form-group">
+                      <div v-for="field in fields">
+                         {{field}}<input type="text" v-model="item[field]">
+                      </div>
+                      <button @click="save">Save</button>
+                      <button @click="close">Close</button>
+                    </div>
+                 </footer>
+              </div>
+           </div>
+        </div>
+   </template>
+</body>
+<script src="https://unpkg.com/vue@2.1.10/dist/vue.js"></script>
+<script type="text/javascript">
+  let eventVue = new Vue()
+  Vue.filter('capitalize',function(text){
+      if(!text){return ''}
+      text = text.toString()
+      return text[0].toUpperCase()+text.slice(1);
+  })
+  Vue.component('simple-grid',{
+     template:'#gridTemplate',
+     props:['searchQuery','dataList','columns'],
+     methods:{
+        deleteRow:function(index){
+           return this.dataList.splice(index,1)
+        },
+        creatNew:function(){
+           return this.dataList.push(this.item)
+        },
+        editRow:function(index){
+          return this.dataList.splice(index,1,this.item)
+       },
+       openEdit:function(index){
+         this.mode = 2+index
+         this.title = 'Edit Row'
+         this.fields = this.columns
+         this.item = this.dataList.slice(index,(index+1))
+         eventVue.$emit('open-dailog')
+       },
+       openNew:function(){
+         this.mode = 1
+         this.title = 'New Row'
+         this.fields = this.columns
+         this.item = {}
+         eventVue.$emit('open-dailog')
+       }
+     },
+     created:function(){
+        eventVue.$on('creat-new',this.creatNew)
+        eventVue.$on('edit-row',this.editRow)
+     },
+     beforeDestroy:function(){
+       eventVue.$off('creat-new',this.creatNew)
+       eventVue.$off('edit-row',this.editRow)
+     },
+     computed:{
+       filterQuery:function(){
+          let search = this.searchQuery;
+          return this.dataList.filter(
+             function(data){
+               return Object.keys(data).some(
+                 function(key){
+                   return String(data[key]).toLowerCase().indexOf(search) > -1
+                 }
+               )
+             }
+          )
+       }
+     },
+     data:function(){
+       return {
+          mode:0,
+          item:{},
+          title:''
+       }
+     },
+     component:{
+       'model-dialog':{
+         template:'#dialog-template',
+         data:function(){
+           return {
+             show:false
+           }
+         },
+         props:['mode','title','fields','item'],
+         methods:{
+           close:function(){
+             this.mode = 0
+             this.title = ''
+             this.fields ={}
+             this.item = {}
+             this.show = false
+           },
+           save:function(){
+              if(this.mode === 1){
+                 eventVue.$emit('creat-new')
+              }else if(this.mode > 1){
+                 eventVue.$emit('edit-row',(this.mode-2))
+              }
+           },
+           open:function(){
+             this.show = true
+           }
+         },
+         created:function(){
+            eventVue.$on('open-dailog',this.open)
+         },
+         beforeDestroy:function(){
+            eventVue.$off('open-dailog',this.open)
+         }
+       }
+     }
+  })
+  new Vue({
+    el:'#app',
+    data:{
+      searchkey:'',
+      columns:['name','age','sex'],
+      people:[{
+        name:'Mike',
+        age:23,
+        sex:'Male'
+      },{
+        name:'Lucy',
+        age:25,
+        sex:'Female'
+      },{
+        name:'Tracy',
+        age:28,
+        sex:'Female'
+      },{
+        name:'Fulamic',
+        age:30,
+        sex:'Male'
+      }]
+    }
+  })
+</script>
+</html>

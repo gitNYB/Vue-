@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <style media="screen">
+    template{display: none;}
+    router-link{display: none;}
+  </style>
+</head>
+<body>
+   <div id="app">
+        <router-link to="/news/nyb">News</router-link>
+        <router-link to="/messages/lww">Messages</router-link>
+        <router-view name="a"></router-view>
+        <router-view name="b"></router-view>
+        <router-view name="c"></router-view>
+   </div>
+   <template id="a">
+     <p>{{$route.params.id}} a </p>
+   </template>
+   <template id="b">
+     <p>{{$route.params.id}} b </p>
+   </template>
+   <template id="c">
+     <p>{{$route.params.id}} c </p>
+   </template>
+</body>
+<script src="https://unpkg.com/vue@2.1.10/dist/vue.js"></script>
+<script src="https://unpkg.com/vue-router/dist/vue-router.js"></script>
+<script type="text/javascript">
+   const routes = [{
+     path:'/news/:id',
+     components:{
+       a:{template:'#a'},
+       b:{template:'#b'},
+       c:{template:'#c'}
+     }
+   },{
+     path:'/messages/:id',
+     components:{
+       a:{template:'#a'},
+       b:{template:'#b'},
+       c:{template:'#c'}
+     }
+   }]
+   const router = new VueRouter({
+       routes:routes
+   })
+   new Vue({router:router}).$mount('#app')
+</script>
+</html>

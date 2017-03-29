@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <style media="screen">
+    template{display: none;}
+    router-link{display: none;}
+  </style>
+</head>
+<body>
+   <div id="app">
+     <router-link to="/home">Home</router-link>
+     <router-link to="/about">About</router-link>
+     <router-view></router-view>
+   </div>
+   <template id="home">
+      <div>
+          <h1>Home Page</h1>
+          <button @click="towww('www.baidu.com')">Baidu</button>
+          <button @click="back">Back</button>
+          <button @click="come">Come</button>
+          <ul>
+            <li><router-link :to="{name:'news',params:{id:'nyb'}}">News</router-link></li>
+            <li><router-link to="/home/lww/messages">Messages</router-link></li>
+          </ul>
+          <router-view></router-view>
+      </div>
+   </template>
+   <template id="about">
+      <div>About us
+      </div>
+   </template>
+   <template id="news">
+      <h1>This is {{$route.params.id}}'s news</h1>
+   </template>
+   <template id="messages">
+      <h1>This is {{$route.params.id}}'s messages</h1>
+   </template>
+</body>
+<script src="https://unpkg.com/vue@2.1.10/dist/vue.js"></script>
+<script src="https://unpkg.com/vue-router/dist/vue-router.js"></script>
+<script type="text/javascript">
+
+   const routes = [{
+     path:'/home',component:{template:'#home',methods:{
+          towww:function(address){
+              this.$router.push('/push');
+          },
+          back:function(){
+              this.$router.go(-1)
+          },
+          come:function(){
+              this.$router.go(1)
+          }
+        }
+     },
+     children:[{
+       name:'news',
+       path:':id/news',
+       component:{template:'#news'}
+     },{
+       path:':id/messages',
+       component:{template:'#messages'}
+     }]
+     },{
+     path:'/about',component:{template:'#about'}
+   }]
+   const router = new VueRouter ({
+     routes:routes
+   })
+   new Vue ({router:router   }).$mount('#app')
+</script>
+</html>

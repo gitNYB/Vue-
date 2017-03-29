@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <link rel="stylesheet" href="css/demo.css">
+</head>
+<body>
+   <div id="app">
+     <table>
+        <tr>
+           <th colspan="3">
+             父组件数据
+           </th>
+       </tr>
+        <tr>
+           <td>Name:</td>
+           <td>{{name}}</td>
+           <td><input type="text" v-model="name"></td>
+        </tr>
+        <tr>
+           <td>Age:</td>
+           <td>{{age}}</td>
+           <td><input type="text" v-model="age"></td>
+        </tr>
+      </table>
+      <my-component :my-name="name" :my-age="age" @chirld="syncAge"></my-component>
+   </div>
+   <template id="myComponent">
+
+       <table>
+         <tr>
+            <th colspan="3">
+              子元素数据
+            </th>
+         </tr>
+         <tr>
+           <td>Name:</td>
+           <td>{{myName}}</td>
+           <td><input type="text" v-model="myName"></td>
+         </tr>
+         <tr>
+            <td>Age:</td>
+            <td>{{myAge}}</td>
+            <td><input type="text" v-model="myAge" v-on:input="agefunc"></td>
+         </tr>
+      </table>
+
+   </template>
+</body>
+<script src="https://unpkg.com/vue@2.1.10/dist/vue.js"></script>
+<script type="text/javascript">
+   let nv = new Vue({
+     el:'#app',
+     data:{
+        name:'nyb',
+        age:28
+     },
+     methods:{
+        syncAge:function(age){
+          this.age = age
+        }
+     },
+     components:{
+        'my-component':{
+           template:'#myComponent',
+           props:['myName','myAge'],
+           methods:{
+             agefunc:function(){
+                let newAge = this.myAge
+                this.$emit('chirld',newAge)
+             }
+           }
+        }
+     }
+   })
+</script>
+</html>

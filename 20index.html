@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <style media="screen">
+    template{ display: none; }
+  </style>
+</head>
+<body>
+  <div id="app">
+     <p>Parents' message : {{pmsg}}</p>
+     <my-component></my-component>
+  </div>
+  <template id="myComponent">
+     <div>
+       <input type="text" v-model="cmsg">
+       <button @click="pushMsg">推送给父组件</button>
+     </div>
+  </template>
+</body>
+<script src="https://unpkg.com/vue@2.1.10/dist/vue.js"></script>
+<script type="text/javascript">
+  let eventVue =new Vue()
+  Vue.component('my-component',{
+     template:'#myComponent',
+     data:function(){
+         return {
+           cmsg:''
+         }
+       },
+     methods:{
+         pushMsg:function(){
+           eventVue.$emit('change-msg',{text:this.cmsg})
+         }
+     }
+  })
+
+  let nv = new Vue({
+    el:'#app',
+    data:{
+      pmsg:[]
+    },
+    methods:{
+      changeMsg:function(msg){
+         this.pmsg.push(msg)
+      }
+    },
+    created:function(){
+       eventVue.$on('change-msg',this.changeMsg)
+    },
+    beforeDestroy:function(){
+      eventVue.$off('change-msg',this.changeMsg)
+    }
+  })
+</script>
+</html>

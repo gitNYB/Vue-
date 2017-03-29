@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <style media="screen">
+    template{ display: none; }
+  </style>
+</head>
+<body>
+ <div id="app">
+    <p>Parent's message:{{fmsg}}</p>
+    <children-component></children-component>
+ </div>
+ <template id="childrenComponent">
+    <div>
+       <p>Children's message:{{cmsg}}</p>
+       <input type="text" v-modle="cmsg">
+       <button @click="tofmsg">改变父元素</button>
+    </div>
+ </template>
+</body>
+<script src="https://unpkg.com/vue@2.1.10/dist/vue.js"></script>
+<script type="text/javascript">
+  let eventVue = new Vue()
+  let nv = new Vue({
+    el:'#app',
+    data:function(){
+      return {
+        fmsg:''
+      }
+    },
+    created: function () {
+     eventVue.$on('change-msg',this.changeMsg)
+  },
+// 最好在组件销毁前
+// 清除事件监听
+    beforeDestroy: function () {
+  eventVue.$off('change-msg',this.changeMsg)
+},
+
+    methods:{
+      changeMsg:function(msg){
+        this.fmsg = msg
+      }
+    },
+    components:{
+      'children-component':{
+        template:'#childrenComponent',
+        data:function(){
+          return{
+            cmsg:''
+          }
+        },
+        methods:{
+          tofmsg:function(){
+            eventVue.$emit('change-msg',this.cmsg)
+          }
+        }
+      }
+    }
+
+  })
+</script>
+</html>

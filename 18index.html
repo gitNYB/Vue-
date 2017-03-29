@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+<body>
+ <div id="app">
+    <my-component></my-component>
+ </div>
+ <template id="myComponent">
+    <div>
+    <p>This is parent component</p>
+    <children-component></children-component>
+    </div>
+ </template>
+ <template id="children-component">
+   <div>
+    <p>This is children component</p>
+    <button @click="showParentMsg">Show Parent Message</button>
+    </div>
+ </template>
+</body>
+<script src="https://unpkg.com/vue@2.1.10/dist/vue.js"></script>
+<script type="text/javascript">
+  Vue.component('my-component',{
+      template:'#myComponent',
+      data:function(){
+        return {
+           msg:'parent message'
+        }
+      },
+      components:{
+         'children-component':{
+            template:'#children-component',
+            methods:{
+               showParentMsg:function(){
+                 alert(this.$parent.msg)
+               }
+            }
+         }
+      }
+  })
+  new Vue({
+    el:'#app'
+  })
+</script>
+</html>

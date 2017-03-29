@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <style media="screen">
+    template{display: none;}
+    router-link{display: none;}
+    router-view{display: none;}
+    
+  </style>
+</head>
+<body>
+   <div id="app">
+      <router-link to="/news">News</router-link>
+      <router-link to="/messages">Messages</router-link>
+      <transition :name="transitionName">
+        <router-view></router-view>
+      </transition>
+
+   </div>
+   <template id="news">
+
+          <p>This is News</p>
+
+   </template>
+   <template id="messages">
+
+          <p>This is Messages</p>
+
+   </template>
+</body>
+<script src="https://unpkg.com/vue@2.1.10/dist/vue.js"></script>
+<script src="https://unpkg.com/vue-router/dist/vue-router.js"></script>
+<script type="text/javascript">
+    const router = new VueRouter({
+      routes:[{
+        path:'/news',
+        component:{
+          template:'#news'
+        }
+      },{
+        path:'/messages',
+        component:{
+          template:'#messages'
+        }
+      }]
+    })
+    new Vue({
+      data:{
+        transitionName:'slide-left'
+      },
+      router:router,
+      watch:{
+        '$route' (to,from){
+           const toDepth = to.path.split('/').length
+           const fromDepth = from.path.split('/').length
+           this.transitionName = toDepth < fromDepth ? 'slide-right' : 'slide-left'
+        }
+      }
+    }).$mount('#app')
+</script>
+</html>

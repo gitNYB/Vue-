@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <style media="screen">
+    template{display: none;}
+    router-link{display: none;}
+    router-view{display: none;}
+  </style>
+</head>
+<body>
+  <div id="app">
+    <router-link to="/news">News</router-link>
+    <router-link to="/messages">Message</router-link>
+    <router-view></router-view>
+  </div>
+  <template id="news">
+    <h1>This is news</h1>
+  </template>
+  <template id="messages">
+    <h2>This is messages</h2>
+  </template>
+</body>
+<script src="https://unpkg.com/vue@2.1.10/dist/vue.js"></script>
+<script src="https://unpkg.com/vue-router/dist/vue-router.js"></script>
+<script type="text/javascript">
+   const router = new VueRouter({
+     routes:[{
+       path:'/news',
+       component:{template:'#news'
+                  // beforeRouteEnter:(to,from,next)=>{
+                  //   if(to.path==='/news'){
+                  //     next('/messages')
+                  //   }
+                  // }
+                 }
+      //  beforeEnter:(to,from,next)=>{
+      //     if(to.path ==='/news'){
+      //       next('/messages')
+      //     }
+      //  }
+     },{
+       path:'/messages',
+       component:{template:'#messages'}
+     }]
+   })
+   router.beforeEach((to,from,next)=>{
+
+      // if(to.path==='/news'){
+      //   next('messages')
+      // }else{
+      //     next()
+      // }
+      if (to.matched.some(record => record.meta.requiresAuth)) {
+    // this route requires auth, check if logged in
+    // if not, redirect to login page.
+    if (!auth.loggedIn()) {
+      next({
+        path: '/login',
+        query: { redirect: to.fullPath }
+      })
+    } else {
+      next()
+    }
+  } else {
+    next() // 确保一定要调用 next()
+  }
+   })
+   new Vue({router:router}).$mount('#app')
+</script>
+</html>

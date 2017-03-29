@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <style media="screen">
+    template{display:none}
+  </style>
+</head>
+<body>
+  <div id="app">
+     <p>父组件内容</p>
+     <input type="text" v-model="fmsg">
+     <button @click="pushMsg" type="button" name="button">广播给子组件</button>
+     <child-component></child-component>
+  </div>
+  <template id="childComponent">
+    <div>
+      <p>子组件内容</p>
+      <ul>
+         <li v-for="msg in cmsg">父组件录入了信息{{msg.text}}</li>
+      </ul>
+    </div>
+  </template>
+</body>
+<script src="https://unpkg.com/vue@2.1.10/dist/vue.js"></script>
+<script type="text/javascript">
+   let eventVue = new Vue()
+   Vue.component('child-component',{
+     template:'#childComponent',
+     data:function(){
+       return{
+         cmsg:[]
+       }
+     },
+     methods:{
+        addMsg:function(msg){
+            this.cmsg.push(msg);
+        }
+     },
+     created:function(){
+        eventVue.$on('add-message',this.addMsg)
+     },
+     beforeDestroy:function(){
+        eventVue.$off('add-message',this.addMsg)
+     }
+   })
+   let nv = new Vue({
+     el:'#app',
+     data:{
+       fmsg:''
+     },
+     methods:{
+        pushMsg:function(){
+          eventVue.$emit('add-message',{text:this.fmsg})
+          this.fmsg=''
+        }
+     }
+   })
+</script>
+</html>
