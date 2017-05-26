@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+<body>
+   <div id="myapp">
+      <ul>
+         <li v-for="name in names">{{name}}</li>
+      </ul>
+      <input type="text" v-model="newName">
+      <button type="button" id="buttonAdd" v-on:click="addname">添加名字</button>
+   </div>
+</body>
+<script src="https://unpkg.com/vue@2.3.3"></script>
+<script type="text/javascript">
+  let data = {
+      names:['jack','lucy','demian','anna'],
+      newName:''
+  }
+  const newVue = new Vue({
+    el:'#myapp',
+    data:data,
+    methods:{
+      addname(){
+         this.names.push(this.newName)
+         this.newName = ''
+      }
+    }
+  })
+</script>
+</html>

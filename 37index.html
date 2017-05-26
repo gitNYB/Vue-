@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <style media="screen">
+    .button{
+      background-color:white;
+    }
+    .isClick{
+      background-color:red;
+    }
+    .isNotClick{
+      background-color:white;
+    }
+  </style>
+  <title>Document</title>
+</head>
+<body>
+  <p>javascript</p>
+   <button type="button" class="button" id="button" title="click it" onclick="changeColor()">点击换颜色</button>
+   <p>——————————————————————————————分割线————————————————————————————————————————</p>
+   <p>Vue.js</p>
+   <div id="myapp">
+       <button :class="[{isClick:isTure},{isNotClick:!isTure}]" @click="changeColV" :title="title" v-text="vueText"></button>
+   </div>
+</body>
+<script src="https://unpkg.com/vue@2.3.3"></script>
+<script type="text/javascript">
+  let data = {
+       vueText :'点击更新颜色',
+       isTure: false,
+       title:'picktion'
+  }
+  const newVue = new Vue({
+    el:'#myapp',
+    data:data,
+    methods:{
+      changeColV(){
+        this.isTure = !this.isTure;
+      }
+    }
+  })
+  //javaxript
+  var changeColor = function(){
+    document.getElementById('button').style.backgroundColor = 'red'
+  }
+</script>
+</html>

@@ -1,0 +1,233 @@
+<%@ page contentType="text/html;charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib uri="http://www.springframework.org/tags/form" prefix="mvc" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+<%@ taglib uri="http://www.pagetag.com" prefix="pt" %>
+<%@ page isELIgnored ="false" %><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>业务日志查询</title>
+
+<link href=" css/style01.css" rel="stylesheet" type="text/css" />
+<link href=" css/window.css" rel="stylesheet" type="text/css" />
+<link href=" css/jquery.dataTables.css" rel="stylesheet" type="text/css" />
+<link href=" css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+<link href=" css/platform-1.css" rel="stylesheet" type="text/css" />
+<link href=" css/cxcalendar.css" rel="stylesheet" type="text/css" />
+
+<script type="text/javascript" charset="utf8" src=" js/jquery-1.11.3.min.js"></script>
+<script type="text/javascript" charset="utf8" src=" js/jquery.dataTables.js"></script>
+<script type="text/javascript" charset="utf8" src=" js/dataTables.tableTools.js"></script>
+<script type="text/javascript" charset="utf8" src=" js/calendar.js"></script>
+<script type="text/javascript">
+
+$(document).ready(function() {
+	    // DataTable
+    var table = $('#datatable').DataTable( {
+            "lengthMenu": [10, 20, 50, 100],
+            "sPaginationType" : "full_numbers",
+            "autoWidth": false,
+            "deferRender": true,
+            "stateSave": false,
+            "processing": true,
+            "dom": 'Tlfrtip',
+            "ordering":true,
+            "aoColumns": [
+                            null,
+                            null,
+                            null,
+                            null,
+                            null,
+                            null,
+                            null,
+                            null,
+                            null,
+                            null,
+
+
+
+                        ],
+             "tableTools": {
+			  "sRowSelect": "multi",
+                "aButtons": [
+                       //{ "sExtends": "new_record", "sButtonText": "Add" },
+                       {
+                           "sExtends": "select", "sButtonText": "",
+
+
+                       }
+                ]
+            },
+            "oLanguage" : {
+                "sLengthMenu": "每页显示 _MENU_ 条记录",
+                "sZeroRecords": "没有找到相应数据",
+                "sInfo": "合计 成功：1  失败：1  处理中：1   </br>  从 _START_ 至 _END_ 条 / 共 _TOTAL_ 条数据",
+                "sInfoEmpty": "没有数据",
+                "sInfoFiltered": "(从 _MAX_ 条数据中检索)",
+                "sZeroRecords": "没有检索到数据",
+                 "sSearch": "查找:",
+                "oPaginate": {
+                "sFirst": "首页",
+                "sPrevious": "前一页",
+                "sNext": "后一页",
+                "sLast": "尾页"
+                }
+            },
+            initComplete: function () {
+            var api = this.api();
+            api.columns().indexes().flatten().each( function ( i ) {
+                var arr = [3,6,8];
+		if($.inArray(i, arr)!= -1)
+                {
+                var column = api.column( i );
+                var select = $('<select><option value="">全部</option></select>')
+                    .appendTo( $(column.footer()).empty() )
+                    .on( 'change', function () {
+                        var val = $.fn.dataTable.util.escapeRegex(
+                            $(this).val()
+                        );
+                        column
+                            .search( val ? '^'+val+'$' : '', true, false )
+                            .draw();
+                    } );
+                column.data().unique().sort().each( function ( d, j ) {
+                    select.append( '<option value="'+d+'">'+d+'</option>' )
+                } );
+                }
+            } );
+        }
+    } );
+
+	// Setup - add a text input to each footer cell
+    $('#datatable tfoot th').each( function () {
+                var arr = [1,2,4,5,7,9];
+		if($.inArray($(this).index(), arr)!= -1)
+		{
+			var title = $('#datatable thead th').eq( $(this).index() ).text();
+			$(this).html( '<input type="text" placeholder="筛选 '+title+'" />' );
+		}
+    } );
+
+    // Apply the search
+    table.columns().eq( 0 ).each( function ( colIdx ) {
+        $( 'input', table.column( colIdx ).footer() ).on( 'keyup change', function () {
+            table
+                .column( colIdx )
+                .search( this.value )
+                .draw();
+        } );
+    } );
+
+} );
+</script>
+</head>
+<body>
+<div class="panel panel-primary">
+	<div class="panel-heading"><h3 class="panel-title">查询条件</h3></div>
+	<div class="panel-body">
+		<table border="0">
+			<mvc:form commandName="QueryInfo" modelAttribute="QueryInfo" action="wf_logs" method="post" onsubmit="return checkTime();">
+				<div class="form-group" >
+					<tr>
+						<td style="text-align:right;width:80px;padding-left:20px">流水号：</td>
+						<td style=""><mvc:input  path="trace_no" class="input-text lh25" size="20" maxlength="16" /></input></td>
+						<td  style="text-align:right;">账户类型：</td>
+						<td>
+							<mvc:select path="acct_type" class="form-control">
+								<mvc:option value="">全部</mvc:option>
+								<mvc:option value="1">基本</mvc:option>
+								<mvc:option value="2">补充</mvc:option>
+							</mvc:select>
+						</td>
+						<td style="text-align:right;padding-left:20px" >业务类型：</td>
+						<td   style="padding-left:20px">
+							<mvc:select path="tx_code" class="form-control">
+						    	<mvc:option value="">全部</mvc:option>
+								<mvc:option value="10001">单位名单增加</mvc:option>
+								<mvc:option value="10002">单位名单删除</mvc:option>
+								<mvc:option value="10003">单位名单查询</mvc:option>
+								<mvc:option value="20002">批查职工状态与账号</mvc:option>
+							</mvc:select>
+						</td>
+						<td style="padding-left:20px"></td>
+						<td></td>
+					</tr>
+					<tr>
+						<td   style="text-align:right;">开始时间：</td>
+						<td><mvc:input path="startTime" class="business_date" id="startTime" /></td>
+						<td style="text-align:right;" >结束时间：</td>
+						<td   style="padding-left:20px"><mvc:input  path="endTime" class="business_date" id="endTime" /></td>
+						<td style="padding-left:20px"></td>
+						<td></td>
+					</tr>
+					<tr>
+						<td  style="text-align:right;padding-left:30px">业务结果：</td>
+						<td>
+							<mvc:select path="retcode" class="form-control">
+								<mvc:option value="">全部</mvc:option>
+								<mvc:option value="0">成功</mvc:option>
+								<mvc:option value="1">失败</mvc:option>
+							</mvc:select>
+						</td>
+						<td  style="text-align:right;padding-left:30px"><button type="submit" class="btn btn-primary" >查询</button></td>
+						<td></td>
+						<td ><button type="submit" class="btn btn-primary" >导出</button></td>
+						<td ></td>
+						<td ></td>
+						<td ></td>
+					</tr>
+				</div>
+			</mvc:form>
+		</table>
+	</div>
+</div>
+<table id="datatable" class="display">
+	<thead>
+		<tr>
+			<th>序号</th>
+			<th>流水号</th>
+			<th>业务类型</th>
+			<th>账户类型</th>
+			<th>业务结果</th>
+			<th>反馈信息</th>
+			<th>业务时间</th>
+			<th>上传条数</th>
+			<th>明细信息</th>
+        </tr>
+    </thead>
+    <tbody>
+		<c:forEach var="p" items="${list}" varStatus="state">
+		<tr class="tr" >
+			<td><center>${state.index + 1}</center></td>
+			<td><center>${p.trace_no }</center></td>
+			<td><center>${p.tx_code }</center></td>
+			<td><center>${p.acct_type }</center></td>
+			<td><center>${p.retcode }</center></td>
+			<td><center>${p.ret_msg }</center></td>
+			<td><center><fmt:formatDate value="${p.created_at }" pattern="yyyy-MM-dd HH:mm:ss" /></center></td>
+			<td><center>${p.num }</center></td>
+			<%--
+			<td><center><button onclick="Open(${p.txCode},'${p.traceNo}');" class="btn btn82 btn_search" ><span></span>查看</button></center></td>
+			--%>
+			<%-- 注释格式 --%>
+		</tr>
+		</c:forEach>
+	</tbody>
+</table>
+
+</body>
+</html>
+<script>
+
+
+	   $('.business_date').each(function(){
+        var a = new Calendar({
+				targetCls: $(this),
+				type: 'yyyy-mm-dd',
+				wday:1
+			},function(val){
+				console.log(val);
+			});
+		});
+</script>

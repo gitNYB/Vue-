@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+   <div id="myapp">
+       <h1>全部任务</h1>
+         <ul>
+             <li ></li>
+         </ul>
+       <h1>未完成任务</h1>
+   </div> 
+</body>
+<script src="https://unpkg.com/vue@2.3.3"></script>
+<script type="text/javascript">
+   let data = {
+       mainlist:[
+           {name:'工作',action:true},
+           {name:'学习',action:false},
+           {name:'代码',action:true},
+           {name:'锻炼',action:false}
+       ]
+   }
+   const nve = new Vue({
+       el:'#myapp',
+       data:data
+   })
+</script>
+</html>

@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+<body>
+  <div id="root">
+    <ul>
+        <li v-for = "name in names"> {{ name }}</li>
+    </ul>
+    <input type="text" id="addName" v-model="newName">
+    <button id="submit">添加姓名</button>
+  </div>
+</body>
+<script src="https://unpkg.com/vue@2.3.3"></script>
+<script type="text/javascript">
+let data = {
+  names: ["jack","rose","kaka","curry"],
+  newName : ''
+};
+
+var vm = new Vue({
+  el: '#root',
+  data:data,
+  mounted() {
+      document.getElementById('submit').addEventListener('click',function(){
+
+          let nameElement = document.getElementById('addName'); //监听
+          vm.names.push(nameElement.value); // 添加姓名
+          nameElement.value = ''; // 清空输入框
+      })
+  }
+});
+</script>
+</html>

@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+<body>
+   <div id="myapp">
+     <p>{{ reversedMessage }}</p>
+     <p>{{ reMessage() }}</p>
+   </div>
+</body>
+<script src="https://unpkg.com/vue@2.3.3"></script>
+<script type="text/javascript">
+  console.log(window.navigator.appCodeName);
+  let data = {
+     message:'hello,vuejs'
+  }
+  const nve = new Vue({
+     el:'#myapp',
+     data:data,
+     computed:{
+       reversedMessage(){
+         return this.message.split('').reverse().join('')
+       }
+     },
+     methods:{
+       reMessage(){
+         return this.message.split('').reverse().join('')
+       }
+     }
+  })
+</script>
+</html>
