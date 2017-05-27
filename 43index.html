@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <link rel="stylesheet" href="css/demo.css">
+  <title>Document</title>
+</head>
+<body>
+    <div id="myapp">
+      <fieldset>
+           <legend>例子</legend>
+           <div class="form-group">
+             <label>姓名</label>
+             <input type="text" v-model="inputInfo.name">
+           </div>
+           <div class="form-group">
+             <label>年龄</label>
+             <input type="text" v-model="inputInfo.age">
+           </div>
+           <div class="form-group">
+             <label>性别</label>
+             <select name="" id="" v-model="inputInfo.sex">
+               <option value="man">男</option>
+               <option value="famale">女</option>
+             </select>
+           </div>
+           <div class="form-group">
+              <label></label>
+              <button v-on:click="addUser">新增</button>
+           </div>
+      </fieldset>
+      <table>
+        <thead>
+          <tr>
+            <th>姓名</th>
+            <th>年龄</th>
+            <th>性别</th>
+            <th>删除</th>
+          </tr>
+        </thead>
+        <tbody>
+            <tr v-for="(list,index) in userlist"  style="text-align:center">
+              <td> {{list.name}} </td>
+              <td> {{list.age}} </td>
+              <td> {{list.sex}} </td>
+              <td><button v-on:click="deleteUser(index)">删除</button></td>
+            </tr>
+        </tbody>
+      </table>
+    </div>
+<script src="https://unpkg.com/vue@2.3.3"></script>    
+<script>
+   let data = {
+       inputInfo:{name:'',age:0,sex:'man'},
+       userlist:[
+         {name:'lucy',age:17,sex:'famale'},
+         {name:'Andy',age:21,sex:'man'},
+         {name:'Boby',age:19,sex:'man'}
+       ]
+   }
+
+   const nve = new Vue({
+     el:'#myapp',
+     data:data,
+     methods:{
+       addUser:function(){
+         this.userlist.push(this.inputInfo)
+         this.inputInfo = {name:'',age:0,sex:'man'}
+       },
+       deleteUser:function(index){
+         this.userlist.splice(index,1)
+       }
+     }
+   })
+</script>    
+</body>
+</html>

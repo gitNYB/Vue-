@@ -10,9 +10,16 @@
    <div id="myapp">
        <h1>全部任务</h1>
          <ul>
-             <li ></li>
+             <li v-for="list in mainlist"> {{list.name}} </li>
+         </ul>
+       <h1>已完成任务</h1>
+         <ul>
+             <li v-for="unfinish in unfinished"> {{unfinish.name}} </li>
          </ul>
        <h1>未完成任务</h1>
+         <ul>
+             <li v-for="complete in completed()"> {{complete.name}} </li>
+         </ul>  
    </div> 
 </body>
 <script src="https://unpkg.com/vue@2.3.3"></script>
@@ -27,7 +34,22 @@
    }
    const nve = new Vue({
        el:'#myapp',
-       data:data
+       data:data,
+       computed:{
+           unfinished(){
+               return this.mainlist.filter(function(list){
+                   return list.action
+               })
+           }
+       },
+       methods:{
+           completed(){
+               return this.mainlist.filter(function(list){
+                   return !list.action
+               })
+           }
+       }
    })
+   
 </script>
 </html>

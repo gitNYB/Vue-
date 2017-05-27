@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+<body>
+   <div id="myapp">
+      <my-component></my-component>
+   </div>
+
+<script src="https://unpkg.com/vue@2.3.3"></script>
+<script>
+   const myComponent = Vue.extend({
+      template:'<div>This is 局部 component</div>'
+   })
+
+   const vm = new Vue({
+      el:'#myapp',
+      components:{
+        'my-component':myComponent
+      }
+   })
+</script>
+</body>
+</html>
