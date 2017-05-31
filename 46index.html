@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+<body>
+<div id="myapp">
+  <parents-component></parents-component>
+</div>
+<script src="https://unpkg.com/vue@2.3.3"></script>  
+  <script>
+    const childComponent = Vue.extend({
+        template : '<div>This is child component</div>'
+    })
+    const parentsComponent = Vue.extend({
+        template : '<div><p>This is Parents component</p><child-component></child-component></div>',
+        components :{
+            'child-component' : childComponent
+        }
+    })  
+    
+    //全局
+    //Vue.component('parents-component',parentsComponent)
+
+    const vm = new Vue({
+        el:'#myapp',
+        //局部
+        components:{
+           'parents-component':parentsComponent
+        }
+    })
+  </script>
+</body>
+</html>

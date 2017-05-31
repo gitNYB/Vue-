@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+<body>
+  <div id="myapp">
+     <my-component></my-component>
+  </div>
+  <template id="myComponent"> 
+     <h1>This is a component</h1>
+  </template>
+  <script src="https://unpkg.com/vue@2.3.3"></script>
+  <script>
+
+     //全局
+     //Vue.component('my-component',{template:'#myComponent'})
+     const vm = new Vue({
+       el:'#myapp',
+       components:{
+         'my-component':{template:'#myComponent'}
+       }
+     })
+  </script>
+</body>
+</html>

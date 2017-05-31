@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <link rel="stylesheet" href="css/demo.css">
+</head>
+<body>
+  <div id="myapp">
+    <table>
+      <thead><th colspan="3">父组件数据</th></thead>
+      <tbody>
+        <tr>
+          <td>name:</td>
+          <td>{{name}}</td>
+          <td><input type="text" v-model="name"></td>
+        </tr>
+        <tr>
+          <td>age:</td>
+          <td>{{age}}</td>
+          <td><input type="text" v-model="age"></td>
+        </tr>
+      </tbody>
+    </table>
+    <tb-component v-bind:myname="name" v-bind:myage="age" v-on:callback="changeVal"></tb-component>
+  </div>
+  <template id="child">
+     <table>
+       <thead><th colspan="3">子组件数据</th></thead>
+       <tbody>
+         <tr>
+           <td>name:</td>
+           <td>{{myname}}</td>
+           <td><input type="text" v-model="myname" ></td>
+         </tr>
+         <tr>
+           <td>age:</td>
+           <td>{{myage}}</td>
+           <td><input type="text" v-model="myage" v-on:input="backtoParents"></td>
+         </tr>
+       </tbody>
+     </table>
+  </template>
+  <script src="https://unpkg.com/vue@2.3.3"></script>
+  <script>
+    const vm = new Vue({
+       el:'#myapp',
+       data:{
+         name:'lily',
+         age:17
+       },
+       methods:{
+          changeVal:function(val){
+              this.age = val
+          }
+       },
+       components:{
+         'tb-component':{
+           template:'#child',
+           props:['myname','myage'],
+           methods:{
+             backtoParents:function(){
+                 let newVal = this.myage
+                 this.$emit('callback',newVal)
+             }
+           }
+         }
+       }
+    })
+  </script>
+</body>
+</html>
