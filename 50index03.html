@@ -17,17 +17,17 @@
       <tbody>
         <tr>
           <td>name:</td>
-          <td>{{name}}</td>
-          <td><input type="text" v-model="name"></td>
+          <td>{{user.name}}</td>
+          <td><input type="text" v-model="user.name"></td>
         </tr>
         <tr>
           <td>age:</td>
-          <td>{{age}}</td>
-          <td><input type="text" v-model="age"></td>
+          <td>{{user.age}}</td>
+          <td><input type="text" v-model="user.age"></td>
         </tr>
       </tbody>
     </table>
-    <te-component v-bind:myname="name" v-bind:myage="age"></te-component>
+    <te-component v-on:push="changeSel" v-bind:myprop="user"></te-component>
   </div>
   <template id="child">
      <table>
@@ -35,29 +35,50 @@
        <tbody>
          <tr>
            <td>name:</td>
-           <td>{{myname}}</td>
-           <td><input type="text" v-model="myname"></td>
+           <td>{{myprop.name}}</td>
+           <td><input type="text" v-model="myprop.name" v-on:input="pushOut"></td>
          </tr>
          <tr>
            <td>age:</td>
-           <td>{{myage}}</td>
-           <td><input type="text" v-model="myage"></td>
+           <td>{{myprop.age}}</td>
+           <td><input type="text" v-model="myprop.age" v-on:input="pushOut"></td>
          </tr>
        </tbody>
      </table>
   </template>
   <script src="https://unpkg.com/vue@2.3.3"></script>
   <script>
+    let data = {
+      name:'bob',
+      age:18
+    }
     const vm = new Vue({
        el:'#myapp',
        data:{
-         name:'lily',
-         age:17
+         user:data
+       },
+       methods:{
+          changeSel:function(val){
+            //  this.name = val.name1
+            //  this.age = val.age1
+            this.user = val
+          }
        },
        components:{
          'te-component':{
            template:'#child',
-           props:['myname','myage']
+          //  data:function(){
+          //    return {
+          //       myname:'',
+          //       myage:0
+          //    }
+          //  },
+           props:['myprop'],
+           methods:{
+              pushOut:function(){
+                 this.$emit('push',this.myprop)
+              }
+           }
          }
        }
     })

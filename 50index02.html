@@ -6,9 +6,6 @@
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>Document</title>
   <link rel="stylesheet" href="css/demo.css">
-  <style>
-    template{display: none;}
-  </style>
 </head>
 <body>
   <div id="myapp">
@@ -17,17 +14,17 @@
       <tbody>
         <tr>
           <td>name:</td>
-          <td>{{name}}</td>
-          <td><input type="text" v-model="name"></td>
+          <td>{{pstore.name}}</td>
+          <td><input type="text" v-model="pstore.name"></td>
         </tr>
         <tr>
           <td>age:</td>
-          <td>{{age}}</td>
-          <td><input type="text" v-model="age"></td>
+          <td>{{pstore.age}}</td>
+          <td><input type="text" v-model="pstore.age"></td>
         </tr>
       </tbody>
     </table>
-    <te-component v-bind:myname="name" v-bind:myage="age"></te-component>
+    <te-component ></te-component>
   </div>
   <template id="child">
      <table>
@@ -35,31 +32,40 @@
        <tbody>
          <tr>
            <td>name:</td>
-           <td>{{myname}}</td>
-           <td><input type="text" v-model="myname"></td>
+           <td>{{mystore.name}}</td>
+           <td><input type="text" v-model="mystore.name" ></td>
          </tr>
          <tr>
            <td>age:</td>
-           <td>{{myage}}</td>
-           <td><input type="text" v-model="myage"></td>
+           <td>{{mystore.age}}</td>
+           <td><input type="text" v-model="mystore.age" ></td>
          </tr>
        </tbody>
      </table>
   </template>
   <script src="https://unpkg.com/vue@2.3.3"></script>
   <script>
+    let localStore = {
+       name:'Bob',
+       age:18
+    }
     const vm = new Vue({
        el:'#myapp',
        data:{
-         name:'lily',
-         age:17
+         pstore:localStore
        },
        components:{
          'te-component':{
            template:'#child',
-           props:['myname','myage']
+           data:function(){
+               return {
+                 mystore:localStore
+               }
+           }
+           
          }
        }
+       
     })
   </script>
 </body>

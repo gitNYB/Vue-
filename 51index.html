@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+<link rel="stylesheet" href="css/demo.css">
+<style>
+  template{display: none;}
+</style>
+<body>
+  <div id="myapp">
+    <my-component>
+      <!--<h1 slot="no1">Hello,Vue</h1>-->
+      <h1>dddd</h1>
+    </my-component>
+    <my-component></my-component>
+  </div>
+  <template id="child">
+     <div class="content">
+        <h2>This is child component</h2>
+        <slot >如果没有内容就不会出现这段文字</slot>
+        
+        <h2>please ssy somethings</h2>
+     </div>
+  </template>
+<script src="https://unpkg.com/vue@2.3.3"></script>
+<script>
+   Vue.component('my-component',{
+      template:'#child'
+   })
+   const vm = new  Vue({
+      el:'#myapp'
+   })
+</script> 
+</body>
+</html>
