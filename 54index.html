@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <link  href="css/demo.css">
+  <style>
+    template{display: none}
+  </style>
+</head>
+<body>
+  <div id="myapp">
+    <parent-component></parent-component>
+  </div>
+
+  <template id="parentComponent">
+    <div>
+      <child-component></child-component>
+    </div>
+  </template>
+  <template id="childComponent">
+    <div>
+      <h1>This is a children component</h1>
+      <button v-on:click="showParent">获取父组件数据</button>
+    </div>
+  </template>
+
+
+  <script src="https://unpkg.com/vue@2.3.3"></script>
+  <script>
+     Vue.component('parent-component',{
+       template:'#parentComponent',
+       data(){
+         return{
+           message:'I am your dad'
+         }
+       },
+       components:{
+         'child-component':{
+           template:'#childComponent',
+           methods:{
+             showParent(){
+               console.log(this.$parent.message)
+             }
+           }
+         }
+       }
+     })
+     const vm = new Vue({
+       el:'#myapp'
+     })
+  </script>
+</body>
+</html>

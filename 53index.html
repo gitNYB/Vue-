@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <link rel="stylesheet" href="css/demo.css">
+  <style>
+     template{display: none;}
+  </style>
+</head>
+<body>
+  <div id="myapp">
+    <parent-component></parent-component>
+  </div>
+  
+  <template id="parentComponent">
+    <div>
+    <child-component1 ref="cc1"></child-component1>
+    <child-component2 ref="cc2"></child-component2>
+    <button class="btn" v-on:click="showChild">显示子组件数据</button>
+    </div>
+  </template>
+
+  <template id="childComponent1">
+    <p>{{message}}</p>
+  </template>
+
+  <template id="childComponent2">
+    <p>{{message}}</p>
+  </template>
+
+
+  <script src="https://unpkg.com/vue@2.3.3"></script>
+  <script>
+    Vue.component('parent-component',{
+      template:'#parentComponent',
+      components:{
+        'child-component1':{
+          template:'#childComponent1',
+          data(){
+            return{
+              message:'This is Child One'
+            }
+          }
+        },
+        'child-component2':{
+          template:'#childComponent2',
+          data(){
+             return{
+               message:'This is Child Two'
+             }
+          }
+        }
+      },
+      methods:{
+        showChild(){
+          for(let i = 0;i<this.$children.length;i++){
+            console.log(this.$children[i].message)
+          }
+          console.log(this.$refs.cc1.message)
+        }
+      }
+    })
+
+    const vm = new Vue({
+       el:'#myapp'
+    })
+  </script>
+</body>
+</html>

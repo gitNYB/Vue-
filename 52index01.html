@@ -13,7 +13,7 @@
 </head>
 <body>
 <div id="myapp">
-  <modle-dialog v-bind:state="state" v-on:show-change="changeEvent">
+  <modle-dialog v-bind:class="state.dialogClass">
      <header class="dialog-header" slot="header">
         <h1 class="dialog-title">提示信息</h1>
      </header>
@@ -27,7 +27,10 @@
         <button class="btn" v-on:click="closeDialog">关闭</button>
      </footer>
   </modle-dialog>
-  <button class="btn btn-open" v-on:click="openDialog">打开对话框</button>
+  <button class="btn btn-open" v-on:click="openDialog('dialog-info')">打开对话框</button>
+  <button class="btn-success" v-on:click="openDialog('dialog-success')">打开对话框</button>
+  <button class="btn-warning" v-on:click="openDialog('dialog-warning')">打开对话框</button>
+  <button class="btn-error" v-on:click="openDialog('dialog-error')">打开对话框</button>
 </div>
 <template id="dialog-template">
   <div class="dialogs">
@@ -48,18 +51,21 @@
 <script src="https://unpkg.com/vue@2.3.3"></script>  
 <script>
   let dialogState = {
-    show:false
+    show:false,
+    dialogClass:'dialog-info'
     }
   Vue.component('modle-dialog',{
      template:'#dialog-template',
-     props:['state'],
+     //props:['state'],
+     data(){
+       return {
+        //  state:dialogState
+         state:this.$root.state
+       }
+     },
      methods:{
        close:function(){
          this.state.show = false
-         this.pushShow()
-       },
-       pushShow:function(){
-         this.$emit('showChange',this.state)
        }
      }
   })
@@ -69,16 +75,19 @@
       state:dialogState
     },
     methods:{
-      openDialog:function(){
+      openDialog:function(dialogClass){
         this.state.show = true
+        this.state.dialogClass = dialogClass
+        this.showChild()
       },
       closeDialog:function(){
         this.state.show = false
       },
-      changeEvent:function(val){
-         this.state = val
-       }
+      showChild(){
+        console.log(this.$children[0].state.show) 
+      }
     }
+    
   })
 </script>  
 </body>
