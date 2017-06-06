@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <link rel="stylesheet" href="css/demo.css">
+  <style>
+    template{display: none;}
+  </style>
+</head>
+<body>
+  <div id="myapp">
+    <talk-list></talk-list>
+  </div>
+  <script src="https://unpkg.com/vue@2.3.3"></script>
+  <script>
+     Vue.component('talk-list',{
+       template:'<div><talk v-for="(talk,index) in talks" :key="index">{{talk.talkname}}</talk></div>',
+       data(){
+         return{
+            talks:[
+              {talkname:'学习',uncompleted:true},
+              {talkname:'编程',uncompleted:false},
+              {talkname:'锻炼',uncompleted:true},
+              {talkname:'阅读',uncompleted:false}
+              ]
+         }
+       }
+     })
+     Vue.component('talk',{
+       template:'<li><slot></slot></li>'
+     })
+     const vm = new Vue({
+        el:'#myapp'
+     })
+  </script>
+</body>
+</html>
